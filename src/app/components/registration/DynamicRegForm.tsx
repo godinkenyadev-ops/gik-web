@@ -472,7 +472,7 @@ export default function DynamicRegForm({ missionData }: DynamicRegFormProps) {
                           <div className="flex items-center gap-3">
                             <Checkbox
                               checked={isSelected}
-                              onCheckedChange={(checked) => {
+                              onCheckedChange={(checked: boolean) => {
                                 const current = formData.attending_days ?? [];
                                 const next = checked
                                   ? [...current, day]
@@ -497,7 +497,7 @@ export default function DynamicRegForm({ missionData }: DynamicRegFormProps) {
                   <Checkbox
                     id={field.name}
                     checked={(formData[field.name] as boolean) ?? false}
-                    onCheckedChange={(value) => handleChange(field.name, Boolean(value))}
+                    onCheckedChange={(value: boolean) => handleChange(field.name, Boolean(value))}
                     className="data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 data-[state=checked]:text-white"
                   />
                   <span className="text-slate-800">{field.label}</span>

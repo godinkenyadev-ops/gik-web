@@ -9,7 +9,7 @@ import Image from "next/image";
 
 
 interface RegistrationPageProps {
-  params: { missionId: string };
+  params: Promise<{ missionId: string }>;
 }
 
 export async function generateStaticParams() {
