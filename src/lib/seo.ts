@@ -26,21 +26,24 @@ export const canonicalUrl = (path = "/"): string => {
 };
 
 export const organizationJsonLd = (): JsonLd => ({
-  "@context": "https://schema.org",
+  "@context": "https://godinkenyamissions.org",
   "@type": "Organization",
   name: "God in Kenya Missions",
   url: getSiteUrl(),
   logo: `${getSiteUrl()}/logo.png`,
   sameAs: [
-    "https://www.facebook.com/godinkenya",
-    "https://www.instagram.com/godinkenya",
-    "https://twitter.com/godinkenya"
+    "https://facebook.com/GodInKenya",
+    "https://www.instagram.com/god_in_kenya_missions",
+    "https://x.com/GodinKenya",
+    "https://www.tiktok.com/@god_in_kenya_missions",
+    "https://youtube.com/@godinkenya",
+    "https://open.spotify.com/show/14mr82Z0Wm3SSrJxgzTDqE"
   ],
-  description: "Faith-driven nonprofit empowering communities across Kenya.",
+  description: "A ministry founded on the desire to see the Gospel preached with great power so that people's faith is established in the power of God.",
   contactPoint: {
     "@type": "ContactPoint",
     contactType: "customer support",
-    email: "hello@godinkenya.org"
+    email: "info@godinkenyamissions.org"
   }
 });
 
