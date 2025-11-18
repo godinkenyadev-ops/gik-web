@@ -75,8 +75,9 @@ export default function NotFound() {
               </p>
             </div>
 
-            <div ref={buttonRef}>
+            <div>
               <Link
+                ref={buttonRef}
                 href="/"
                 className="inline-flex items-center gap-2 bg-linear-to-r from-primary-600 to-emerald-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group"
               >
