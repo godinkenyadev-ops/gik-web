@@ -1,19 +1,9 @@
 'use client'
 
 import { useEffect, useRef, useCallback } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
-import { FaInstagram, FaFacebookF, FaTiktok, FaXTwitter, FaYoutube, FaSpotify } from 'react-icons/fa6'
 import { gsap } from 'gsap'
-
-const socialLinks = [
-  { platform: "Instagram", Icon: FaInstagram, url: "https://www.instagram.com/god_in_kenya_missions" },
-  { platform: "Facebook", Icon: FaFacebookF, url: "https://facebook.com/GodInKenya" },
-  { platform: "TikTok", Icon: FaTiktok, url: "https://www.tiktok.com/@god_in_kenya_missions" },
-  { platform: "X", Icon: FaXTwitter, url: "https://x.com/GodinKenya" },
-  { platform: "YouTube", Icon: FaYoutube, url: "https://youtube.com/@godinkenya" },
-  { platform: "Spotify", Icon: FaSpotify, url: "https://open.spotify.com/show/14mr82Z0Wm3SSrJxgzTDqE" },
-]
+import SocialLinks from '../../ui/SocialLinks'
 
 export default function ComingSoon() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -26,14 +16,9 @@ export default function ComingSoon() {
 
   // Use arrays + useCallback to safely collect refs
   const floatingElementsRef = useRef<(HTMLDivElement | null)[]>([])
-  const socialIconsRef = useRef<(HTMLAnchorElement | null)[]>([])
 
   const setFloatingRef = useCallback((el: HTMLDivElement | null, index: number) => {
     floatingElementsRef.current[index] = el
-  }, [])
-
-  const setSocialRef = useCallback((el: HTMLAnchorElement | null, index: number) => {
-    socialIconsRef.current[index] = el
   }, [])
 
   useEffect(() => {
@@ -41,7 +26,7 @@ export default function ComingSoon() {
       gsap.set([containerRef.current, cardRef.current], { opacity: 0, y: 50 })
       gsap.set([logoRef.current, titleRef.current, descriptionRef.current, progressRef.current, verseRef.current], { opacity: 0, y: 30 })
       gsap.set(floatingElementsRef.current, { opacity: 0, scale: 0 })
-      gsap.set(socialIconsRef.current, { opacity: 0, y: 20 })
+
 
       const tl = gsap.timeline({ delay: 0.3 })
 
@@ -58,15 +43,7 @@ export default function ComingSoon() {
         gsap.to(progressBar, { width: "100%", duration: 2.5, ease: "power2.inOut", delay: 1 })
       }
 
-      // Social icons
-      gsap.to(socialIconsRef.current, {
-        opacity: 1,
-        y: 0,
-        duration: 0.6,
-        ease: "power2.out",
-        stagger: 0.08,
-        delay: 1
-      })
+
 
       // Floating dots
       gsap.to(floatingElementsRef.current, {
@@ -172,22 +149,7 @@ export default function ComingSoon() {
                 While you wait, follow us to stay connected with our latest mission updates and the Gospel of Our Lord Jesus in action.
               </p>
 
-              <div className="flex flex-nowrap justify-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                {socialLinks.map(({ platform, Icon, url }, i) => (
-                  <Link
-                    key={platform}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    ref={(el) => setSocialRef(el, i)}
-                    className="shrink-0 w-9 h-9 md:w-11 md:h-11 bg-white rounded-xl shadow-md hover:shadow-xl border border-gray-200 flex items-center justify-center text-xl text-gray-700 hover:text-primary transition-all duration-300 hover:scale-110 group"
-                  >
-                    <div className="absolute inset-0 rounded-xl bg-linear-to-br from-primary-500 to-emerald-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    <Icon className="w-5 h-5 text-gray-600 group-hover:text-white transition-colors duration-200 relative z-10" />
-                    <span className="sr-only">{platform}</span>
-                  </Link>
-                ))}
-              </div>
+              <SocialLinks variant="compact" />
             </div>
 
             <div ref={verseRef} className="border-t border-gray-200/60 pt-6">

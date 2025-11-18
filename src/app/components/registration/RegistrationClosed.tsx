@@ -1,36 +1,13 @@
 import Image from "next/image";
-import {
-  FaFacebookF,
-  FaInstagram,
-  FaSpotify,
-  FaTiktok,
-  FaXTwitter,
-  FaYoutube,
-} from "react-icons/fa6";
+import SocialLinks from "../ui/SocialLinks";
 
 interface RegistrationClosedProps {
   missionTitle: string;
 }
 
-const socialLinks = [
-  { platform: "Instagram", Icon: FaInstagram, url: "https://www.instagram.com/god_in_kenya_missions" },
-  { platform: "Facebook", Icon: FaFacebookF, url: "https://facebook.com/GodInKenya" },
-  { platform: "TikTok", Icon: FaTiktok, url: "https://www.tiktok.com/@god_in_kenya_missions" },
-  { platform: "X", Icon: FaXTwitter, url: "https://x.com/GodinKenya" },
-  { platform: "YouTube", Icon: FaYoutube, url: "https://youtube.com/@godinkenya" },
-  { platform: "Spotify", Icon: FaSpotify, url: "https://open.spotify.com/show/14mr82Z0Wm3SSrJxgzTDqE" },
-];
-
-const brandColors: Record<string, string> = {
-  Instagram: "#E4405F",
-  Facebook: "#1877F2",
-  TikTok: "#EE1D52",
-  X: "#000000",
-  YouTube: "#FF0000",
-  Spotify: "#1DB954",
-};
 
 export default function RegistrationClosed({ missionTitle }: RegistrationClosedProps) {
+
   return (
     <section className="flex min-h-screen items-center justify-center bg-linear-to-br from-teal-50 via-emerald-50 to-orange-50 px-4 py-10 sm:py-16">
       <div className="w-full max-w-lg sm:max-w-3xl mx-auto overflow-hidden rounded-3xl border border-slate-100 bg-white/95 shadow-[0_25px_60px_rgba(15,23,42,0.12)]">
@@ -54,33 +31,12 @@ export default function RegistrationClosed({ missionTitle }: RegistrationClosedP
         </div>
 
         <div className="px-5 sm:px-6 py-8 sm:py-10">
-          <p className="text-center text-slate-700 sm:text-base max-w-sm mx-auto mb-8">
+          <p className="text-center text-slate-700 text-sm sm:text-base max-w-sm mx-auto mb-8">
             Follow us and be the first to know of upcoming missions.
           </p>
 
           <div className="overflow-x-auto scrollbar-hide">
-            <div className="flex justify-center items-center gap-4 min-w-max p-4">
-              {socialLinks.map(({ platform, Icon, url }) => (
-                <a
-                  key={platform}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex flex-col items-center transition-all duration-300 hover:-translate-y-1"
-                  title={`Follow us on ${platform}`}
-                >
-                  <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl bg-white flex items-center justify-center shadow-md group-hover:shadow-xl transition-all duration-300 border border-gray-200">
-                    <Icon
-                      className="w-5 h-5 md:w-7 md:h-7 transition-transform duration-300 group-hover:scale-110"
-                      style={{ color: brandColors[platform] || "#6B7280" }}
-                    />
-                  </div>
-                  <span className="mt-2 text-xs font-medium text-gray-700 hidden sm:block">
-                    {platform}
-                  </span>
-                </a>
-              ))}
-            </div>
+            <SocialLinks />
           </div>
         </div>
 
