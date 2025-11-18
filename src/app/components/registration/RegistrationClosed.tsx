@@ -32,7 +32,7 @@ const brandColors: Record<string, string> = {
 
 export default function RegistrationClosed({ missionTitle }: RegistrationClosedProps) {
   return (
-    <section className="flex h-full items-center justify-center bg-linear-to-br from-teal-50 via-emerald-50 to-orange-50 px-4 py-10 sm:py-16">
+    <section className="flex min-h-screen items-center justify-center bg-linear-to-br from-teal-50 via-emerald-50 to-orange-50 px-4 py-10 sm:py-16">
       <div className="w-full max-w-lg sm:max-w-3xl mx-auto overflow-hidden rounded-3xl border border-slate-100 bg-white/95 shadow-[0_25px_60px_rgba(15,23,42,0.12)]">
         <div className="border-b border-rose-100 bg-linear-to-r from-rose-50 to-red-50 px-5 sm:px-6 py-8 sm:py-10 text-center">
           <div className="mx-auto mb-5 sm:mb-6 flex items-center justify-center">
@@ -47,20 +47,19 @@ export default function RegistrationClosed({ missionTitle }: RegistrationClosedP
           </div>
           <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Registration Closed</h1>
           <p className="mt-2 text-sm sm:text-base text-slate-600 px-2">
-            We’re sorry, registration for{" "}
+            We&apos;re sorry, registration for{" "}
             <span className="font-semibold text-primary">{missionTitle}</span> is now closed.
             Stay connected with us for upcoming missions.
           </p>
         </div>
 
         <div className="px-5 sm:px-6 py-8 sm:py-10">
-          <p className="text-center text-slate-700 text-sm sm:text-base max-w-sm mx-auto mb-8">
-            Don’t miss out on our next missions! Follow us and be the first to know about future opportunities.
+          <p className="text-center text-slate-700 sm:text-base max-w-sm mx-auto mb-8">
+            Follow us and be the first to know of upcoming missions.
           </p>
 
-          {/* UPDATED SOCIAL ICONS SECTION */}
           <div className="overflow-x-auto scrollbar-hide">
-            <div className="flex justify-center items-center gap-4 min-w-max px-4">
+            <div className="flex justify-center items-center gap-4 min-w-max p-4">
               {socialLinks.map(({ platform, Icon, url }) => (
                 <a
                   key={platform}
@@ -70,13 +69,13 @@ export default function RegistrationClosed({ missionTitle }: RegistrationClosedP
                   className="group flex flex-col items-center transition-all duration-300 hover:-translate-y-1"
                   title={`Follow us on ${platform}`}
                 >
-                  <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center shadow-md group-hover:shadow-xl transition-all duration-300 border border-gray-200">
+                  <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl bg-white flex items-center justify-center shadow-md group-hover:shadow-xl transition-all duration-300 border border-gray-200">
                     <Icon
-                      className="w-7 h-7 transition-transform duration-300 group-hover:scale-110"
+                      className="w-5 h-5 md:w-7 md:h-7 transition-transform duration-300 group-hover:scale-110"
                       style={{ color: brandColors[platform] || "#6B7280" }}
                     />
                   </div>
-                  <span className="mt-2 text-xs font-medium text-gray-700">
+                  <span className="mt-2 text-xs font-medium text-gray-700 hidden sm:block">
                     {platform}
                   </span>
                 </a>
