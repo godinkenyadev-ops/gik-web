@@ -6,7 +6,7 @@ export const MISSIONS: MissionDetails[] = [
     title: "Nairobi Hope Outreach",
     description: "A one-day intensive serving communities in Nairobi.",
     start_date: "2025-11-20",
-    registration_close_date: "2025-11-01",
+    registration_close_date: "2025-12-21",
     registration_fee: 1500,
     couple_registration_fee: 10000,
     registration_fee_required: true,
