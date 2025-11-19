@@ -105,7 +105,7 @@ export default async function RegistrationPage({ params }: RegistrationPageProps
                   {mission.description}
                 </p>
               )}
-              <div className="mt-5 flex items-center justify-center gap-6 text-white/95 text-sm sm:text-base font-medium">
+              <div className="mt-5 flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 text-white/95 text-sm md:text-base">
                 <div className="flex items-center gap-2">
                   <CalendarDays className="size-5 text-white/90" />
                   <span>{missionDates}</span>

@@ -146,7 +146,7 @@ export default function ComingSoon() {
 
             <div className="mb-8">
               <p className="text-gray-600 text-base md:text-base mb-8 max-w-md mx-auto">
-                While you wait, follow us to stay connected with our latest mission updates and the Gospel of Our Lord Jesus in action.
+                While you wait, follow us to stay connected with our latest mission updates.
               </p>
 
               <SocialLinks variant="compact" />
