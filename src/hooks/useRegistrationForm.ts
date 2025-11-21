@@ -58,14 +58,22 @@ export function useRegistrationForm(missionData: MissionDetails) {
   };
 
   useEffect(() => {
-
-    // const missionType = (missionData as any).event_type === "week-long" ? "week-long" : "one-day";
-    const missionType = missionData.event_type;
-    console.log("Mission Type");
-    console.log(missionType)
+    // Determine mission type based on multiple criteria
+    const hasEndDate = missionData.end_date && missionData.end_date !== missionData.start_date;
+    const eventType = (missionData as any).event_type;
+    
+    console.log("Mission Data:", missionData);
+    console.log("Event Type:", eventType);
+    console.log("Has End Date:", hasEndDate);
+    
+    // Check if it's a week_long mission based on event_type or having different start/end dates
+    const missionType = (eventType === "week_long" || eventType === "week_long" || eventType === "retreat" || hasEndDate) ? "week_long" : "one-day";
+    
+    console.log("Determined Mission Type:", missionType);
+    
     const template = formTemplates[missionType] ? [...formTemplates[missionType]] : [...formTemplates["one-day"]];
 
-    if (missionType === "week-long" && missionData.end_date) {
+    if (missionType === "week_long" && missionData.end_date) {
       const idx = template.findIndex(f => f.name === "attending_days");
       if (idx !== -1) {
         template[idx].options = generateDaysArray(missionData.start_date, missionData.end_date);
@@ -94,7 +102,7 @@ export function useRegistrationForm(missionData: MissionDetails) {
     });
 
     const weekLong = base.extend({
-      mission_type: z.literal("week-long"),
+      mission_type: z.literal("week_long"),
       attending_days: z.array(z.string()).min(1, "Select at least one day"),
       coming_as_couple: z.boolean().optional(),
       partner_name: z.string().optional(),
@@ -135,8 +143,12 @@ export function useRegistrationForm(missionData: MissionDetails) {
         if (bool) delete (updated as any).support_needed;
       }
 
-      // Only allow week-long fields if this is a week-long mission
-      if (missionData.event_type === "week-long") {
+      // Only allow week_long fields if this is a week_long mission
+      const hasEndDate = missionData.end_date && missionData.end_date !== missionData.start_date;
+      const eventType = (missionData as any).event_type;
+      const isWeekLong = eventType === "week_long" || eventType === "week_long" || hasEndDate;
+      
+      if (isWeekLong) {
         if (name === "coming_as_couple") {
           (updated as any).coming_as_couple = value as boolean;
           if (!value) delete (updated as any).partner_name;

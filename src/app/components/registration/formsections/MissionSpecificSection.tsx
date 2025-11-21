@@ -51,7 +51,7 @@ export function MissionSpecificSection({
         />
       )}
       
-      {missionData.event_type === "week-long" && (
+      {missionData.event_type === "week_long" && (
         <>
           <CheckboxInput
             name="coming_as_couple"

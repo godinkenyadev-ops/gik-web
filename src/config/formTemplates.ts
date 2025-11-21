@@ -17,7 +17,7 @@ export const formTemplates: Record<MissionType, FormField[]> = {
     },
     { name: "travelling_from", label: "Travelling From", type: "text", required: true }
   ],
-  "week-long": [
+  "week_long": [
     { name: "first_name", label: "First Name", type: "text", required: true },
     { name: "last_name", label: "Last Name", type: "text", required: true },
     { name: "phone_number", label: "Phone Number", type: "text", required: true },

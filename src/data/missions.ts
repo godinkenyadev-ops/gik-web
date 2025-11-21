@@ -17,7 +17,7 @@
 //   {
 //     id: "2",
 //     title: "Naivasha Couples Retreat",
-//     description: "A transformative week-long retreat for couples committed to service.",
+//     description: "A transformative week_long retreat for couples committed to service.",
 //     start_date: "2025-12-01",
 //     end_date: "2025-12-07",
 //     registration_close_date: "2025-11-10",
@@ -25,13 +25,13 @@
 //     couple_registration_fee: 11000,
 //     registration_fee_required: true,
 //     is_individual: false,
-//     mission_type: "week-long",
+//     mission_type: "week_long",
 //     location: "Naivasha, Kenya"
 //   },
 //   {
 //     id: "3",
 //     title: "Mombasa Couples Retreat",
-//     description: "A transformative week-long retreat for couples committed to service.",
+//     description: "A transformative week_long retreat for couples committed to service.",
 //     start_date: "2025-12-01",
 //     end_date: "2025-12-07",
 //     registration_close_date: "2025-12-10",
@@ -39,13 +39,13 @@
 //     couple_registration_fee: 11000,
 //     registration_fee_required: true,
 //     is_individual: false,
-//     mission_type: "week-long",
+//     mission_type: "week_long",
 //     location: "Naivasha, Kenya"
 //   },
 //   {
 //     id: "4",
 //     title: "Tatu Retreat",
-//     description: "A transformative week-long retreat for couples committed to service.",
+//     description: "A transformative week_long retreat for couples committed to service.",
 //     start_date: "2025-12-01",
 //     end_date: "2025-12-07",
 //     registration_close_date: "2025-12-10",
@@ -53,7 +53,7 @@
 //     couple_registration_fee: 11000,
 //     registration_fee_required: true,
 //     is_individual: false,
-//     mission_type: "week-long",
+//     mission_type: "week_long",
 //     location: "Naivasha, Kenya"
 //   }
 // ];

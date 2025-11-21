@@ -21,7 +21,7 @@ export interface OneDayRegistration extends BaseRegistration {
 }
 
 export interface WeekLongRegistration extends BaseRegistration {
-  mission_type: "week-long";
+  mission_type: "week_long";
   attending_days: string[];
   coming_as_couple?: boolean;
   partner_name?: string;
@@ -33,7 +33,7 @@ export const isOneDayRegistration = (
 
 export const isWeekLongRegistration = (
   data: RegistrationSubmission
-): data is WeekLongRegistration => data.mission_type === "week-long";
+): data is WeekLongRegistration => data.mission_type === "week_long";
 
 
 export interface ApiRegistrationPayload {
