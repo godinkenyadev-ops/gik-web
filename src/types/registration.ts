@@ -1,0 +1,112 @@
+import type { Gender, MissionType } from "./mission";
+
+export type RegistrationSubmission = OneDayRegistration | WeekLongRegistration;
+
+
+interface BaseRegistration {
+  mission_id: string;
+  first_name: string;
+  last_name: string;
+  phone_number: string;
+  gender: Gender;
+  travelling_from: string;
+  dietary_watch?: string;
+  can_pay_full: boolean;
+  support_needed?: string; 
+}
+
+export interface OneDayRegistration extends BaseRegistration {
+  mission_type: "one-day";
+  mission_date: string; 
+}
+
+export interface WeekLongRegistration extends BaseRegistration {
+  mission_type: "week-long";
+  attending_days: string[];
+  coming_as_couple?: boolean;
+  partner_name?: string;
+}
+
+export const isOneDayRegistration = (
+  data: RegistrationSubmission
+): data is OneDayRegistration => data.mission_type === "one-day";
+
+export const isWeekLongRegistration = (
+  data: RegistrationSubmission
+): data is WeekLongRegistration => data.mission_type === "week-long";
+
+
+export interface ApiRegistrationPayload {
+  mission_id: number;
+  user_id?: string;                 
+  full_name: string;                 
+  phone_number: string;
+  travelling_from: string;
+  days_of_attendance?: Array<{
+    day: number;
+    day_date: string;
+  }>;
+  diet_advisory?: string;
+  need_facilitation: boolean;          
+  facilitation_amount: number;        
+  gender: Gender;
+  coming_as_couple: boolean;
+  partner_name?: string;
+}
+
+export interface ApiResponse<T = unknown> {
+  success: boolean;
+  data?: T;
+  message?: string;
+  errors?: string[];
+}
+
+export interface RegistrationApiResponse extends ApiResponse {
+  data?: {
+    registration_id: string;
+    status: "pending" | "confirmed" | "cancelled";
+  };
+}
+
+export type ApiErrorCode =
+  | "VALIDATION_ERROR"
+  | "DUPLICATE_REGISTRATION"
+  | "MISSION_NOT_FOUND"
+  | "PAYMENT_REQUIRED"
+  | "INTERNAL_SERVER_ERROR";
+
+
+export interface RegistrationValidationError {
+  field: keyof RegistrationSubmission;
+  message: string;
+}
+
+export interface ValidationResult {
+  isValid: boolean;
+  errors: RegistrationValidationError[];
+}
+
+export interface FormState {
+  data: Partial<RegistrationSubmission>;
+  errors: Partial<Record<keyof RegistrationSubmission, string>>;
+  isSubmitting: boolean;
+  touched: Set<keyof RegistrationSubmission>;
+}
+
+export interface AlreadyRegisteredResponse {
+  success: true;
+  is_already_registered: true;
+  existing_registration: {
+    registration_id: string;
+    registration_date: string;
+  };
+}
+
+export interface FormField {
+  name: string;
+  label: string;
+  type: string;
+  required?: boolean;
+  options?: string[];
+  show_if?: { field: string; value: string | boolean };
+}

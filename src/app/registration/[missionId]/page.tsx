@@ -1,54 +1,57 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getMissionById, MISSIONS } from "@/data/missions";
-import DynamicRegForm from "@/app/components/registration/DynamicRegForm";
+import { registrationApi } from "@/lib/registrationApi";
+
 import RegistrationClosed from "@/app/components/registration/RegistrationClosed";
 import { canonicalUrl, jsonLdString, missionRegistrationJsonLd } from "@/lib/seo";
 import { CalendarDays, MapPin } from "lucide-react"
 import Image from "next/image";
+import RegForm from "@/app/components/registration/RegForm";
 
 
 interface RegistrationPageProps {
   params: Promise<{ missionId: string }>;
 }
 
-export async function generateStaticParams() {
-  return MISSIONS.map((mission) => ({ missionId: mission.id }));
-}
-
 export async function generateMetadata({ params }: RegistrationPageProps): Promise<Metadata> {
   const { missionId } = await params;
-  const mission = getMissionById(decodeURIComponent(missionId));
+  
+  try {
+    const mission = await registrationApi.getMissionPublic(decodeURIComponent(missionId));
+    
+    const title = `Register for ${mission.title} | God in Kenya Missions`;
+    const description = mission.description ?? "Join an upcoming mission with God in Kenya Missions.";
 
-  if (!mission) {
+    return {
+      title,
+      description,
+      alternates: { canonical: canonicalUrl(`/registration/${mission.id}`) },
+      openGraph: {
+        title,
+        description,
+        url: canonicalUrl(`/registration/${mission.id}`),
+        type: "website",
+      },
+      twitter: { card: "summary_large_image", title, description },
+    };
+  } catch {
     return {
       title: "Mission Not Found | God in Kenya Missions",
       description: "This mission is unavailable.",
     };
   }
-
-  const title = `Register for ${mission.title} | God in Kenya Missions`;
-  const description = mission.description ?? "Join an upcoming mission with God in Kenya Missions.";
-
-  return {
-    title,
-    description,
-    alternates: { canonical: canonicalUrl(`/registration/${mission.id}`) },
-    openGraph: {
-      title,
-      description,
-      url: canonicalUrl(`/registration/${mission.id}`),
-      type: "website",
-    },
-    twitter: { card: "summary_large_image", title, description },
-  };
 }
 
 export default async function RegistrationPage({ params }: RegistrationPageProps) {
   const { missionId } = await params;
-  const mission = getMissionById(decodeURIComponent(missionId));
-
-  if (!mission) notFound();
+  
+  let mission: any;
+  try {
+    mission = await registrationApi.getMissionPublic(decodeURIComponent(missionId));
+    console.log(mission);
+  } catch {
+    notFound();
+  }
 
   const now = new Date();
   const closeDate = new Date(mission.registration_close_date);
@@ -63,7 +66,7 @@ export default async function RegistrationPage({ params }: RegistrationPageProps
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
-      })} – ${new Date(mission.end_date).toLocaleDateString("en-GB", {
+      })} - ${new Date(mission.end_date).toLocaleDateString("en-GB", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
@@ -113,7 +116,7 @@ export default async function RegistrationPage({ params }: RegistrationPageProps
 
                 <div className="flex items-center gap-2">
                   <MapPin className="size-5 text-white/90" />
-                  <span>{mission.location}</span>
+                  <span>{mission.location_name || mission.location}</span>
                 </div>
               </div>
             </div>
@@ -127,7 +130,7 @@ export default async function RegistrationPage({ params }: RegistrationPageProps
             </p>
 
             <div className="mt-10">
-              <DynamicRegForm missionData={mission} />
+              <RegForm missionData={mission as any} />
             </div>
           </div>
         </div>

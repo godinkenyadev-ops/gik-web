@@ -52,3 +52,4 @@ export async function postJson<TResponse, TBody extends Record<string, unknown>>
 
   return handleResponse<TResponse>(response);
 }
+

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import { gsap } from 'gsap'
-import SocialLinks from '../../ui/SocialLinks'
+import SocialLinks from '../ui/SocialLinks'
 
 export default function ComingSoon() {
   const containerRef = useRef<HTMLDivElement>(null)
