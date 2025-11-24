@@ -35,7 +35,7 @@ export async function getJson<T>(endpoint: string, options: FetchOptions = {}): 
   return handleResponse<T>(response);
 }
 
-export async function postJson<TResponse, TBody extends Record<string, unknown>>(
+export async function postJson<TResponse, TBody extends object = object>(
   endpoint: string,
   body: TBody,
   options: FetchOptions = {}
@@ -46,8 +46,8 @@ export async function postJson<TResponse, TBody extends Record<string, unknown>>
     body: JSON.stringify(body),
     headers: {
       ...defaultHeaders,
-      ...options.headers
-    }
+      ...options.headers,
+    },
   });
 
   return handleResponse<TResponse>(response);

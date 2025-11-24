@@ -1,5 +1,5 @@
-export type Gender = "Male" | "Female";
-export type MissionType = "one-day" | "week_long";
+export type Gender = "male" | "female";
+export type MissionType = "one_day" | "week_long";
 
 export interface MissionDetails {
   id: string;
@@ -15,7 +15,7 @@ export interface MissionDetails {
 
 export const isOneDayMission = (
   m: MissionDetails
-): m is MissionDetails & { mission_type: "one-day" } => m.event_type === "one-day";
+): m is MissionDetails & { mission_type: "one_day" } => m.event_type === "one_day";
 
 export const isWeekLongMission = (
   m: MissionDetails

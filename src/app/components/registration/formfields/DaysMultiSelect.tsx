@@ -5,19 +5,20 @@ interface DaysMultiSelectProps {
   label: string;
   required?: boolean;
   days: string[];
-  selectedDays: string[];
-  onChange: (days: string[]) => void;
+  selectedDays: { day: number; day_date: string }[];
+  onChange: (days: { day: number; day_date: string }[]) => void;
   error?: string;
 }
 
 export function DaysMultiSelect({ 
-  label, 
-  required, 
-  days, 
-  selectedDays, 
-  onChange, 
-  error 
+  label,
+  required,
+  days,
+  selectedDays,
+  onChange,
+  error,
 }: DaysMultiSelectProps) {
+
   const formatDateForDisplay = (dateStr: string): string => {
     const date = new Date(dateStr);
     return date.toLocaleDateString("en-US", {
@@ -27,20 +28,26 @@ export function DaysMultiSelect({
     });
   };
 
+  const selectedDateSet = new Set(selectedDays.map((d) => d.day_date));
+
   const handleSelectAll = () => {
-    const allSelected = selectedDays.length === days.length;
-    if (allSelected) {
-      onChange([]);
+    if (selectedDays.length === days.length) {
+      onChange([]); 
     } else {
-      onChange(days);
+      onChange(
+        days.map((date, index) => ({
+          day: index +1,
+          day_date: date,
+        }))
+      );
     }
   };
 
-  const handleDayToggle = (day: string) => {
-    if (selectedDays.includes(day)) {
-      onChange(selectedDays.filter(d => d !== day));
+  const handleDayToggle = (date: string, dayIndex: number) => {
+    if (selectedDateSet.has(date)) {
+      onChange(selectedDays.filter((d) => d.day_date !== date));
     } else {
-      onChange([...selectedDays, day]);
+      onChange([...selectedDays, { day: dayIndex, day_date: date }]);
     }
   };
 
@@ -60,12 +67,12 @@ export function DaysMultiSelect({
       </button>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {days.map((day) => {
-          const isSelected = selectedDays.includes(day);
+      {days.map((date, index) => {
+          const isSelected = selectedDateSet.has(date);
 
           return (
             <label
-              key={day}
+              key={date}
               className={cn(
                 "flex cursor-pointer items-center justify-between rounded-2xl border px-4 py-3 sm:py-4 transition-all",
                 "hover:border-emerald-500 hover:bg-emerald-50",
@@ -75,20 +82,18 @@ export function DaysMultiSelect({
               <div className="flex items-center gap-3">
                 <Checkbox
                   checked={isSelected}
-                  onCheckedChange={() => handleDayToggle(day)}
+                  onCheckedChange={() => handleDayToggle(date, index)}
                   className="data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 data-[state=checked]:text-white"
                 />
 
                 <span className="text-slate-800 font-medium">
-                  {formatDateForDisplay(day)}
+                  {formatDateForDisplay(date)}
                 </span>
               </div>
             </label>
           );
         })}
       </div>
-      
-      {error && <p className="text-sm text-rose-500">{error}</p>}
     </div>
   );
 }

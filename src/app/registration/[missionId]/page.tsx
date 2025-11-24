@@ -73,12 +73,12 @@ export default async function RegistrationPage({ params }: RegistrationPageProps
       })}`
       : new Date(mission.start_date).toLocaleDateString("en-GB", {
         day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
+        month: "2-digit",        year: "numeric",
       });
 
+
   return (
-    <section className="min-h-screen bg-linear-to-br from-teal-50 via-emerald-50 to-orange-50 px-4 py-4 md:py-10 sm:px-0">
+    <section className="min-h-screen bg-linear-to-br from-teal-50 via-emerald-50 to-orange-50 px-6 py-4 md:py-10">
       <div className="mx-auto max-w-4xl">
         <div className="rounded-3xl bg-white shadow-[0_40px_80px_rgba(0,0,0,0.12)]">
 

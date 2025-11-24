@@ -1,45 +1,46 @@
-import type { Gender, MissionType } from "./mission";
+import type { Gender } from "./mission";
 
 export type RegistrationSubmission = OneDayRegistration | WeekLongRegistration;
 
-
 interface BaseRegistration {
-  mission_id: string;
+  mission_id: number;                   
   first_name: string;
   last_name: string;
   phone_number: string;
   gender: Gender;
-  travelling_from: string;
+  travelling_from?: string;              
   dietary_watch?: string;
   can_pay_full: boolean;
-  support_needed?: string; 
+  support_needed?: string;
 }
 
 export interface OneDayRegistration extends BaseRegistration {
-  mission_type: "one-day";
-  mission_date: string; 
+  mission_type: "one_day";
+  mission_date: string;                  
 }
 
 export interface WeekLongRegistration extends BaseRegistration {
   mission_type: "week_long";
-  attending_days: string[];
+  attending_days?: Array<{
+    day: number;                         
+    day_date: string;                   
+  }>;
   coming_as_couple?: boolean;
   partner_name?: string;
 }
 
 export const isOneDayRegistration = (
   data: RegistrationSubmission
-): data is OneDayRegistration => data.mission_type === "one-day";
+): data is OneDayRegistration => data.mission_type === "one_day";
 
 export const isWeekLongRegistration = (
   data: RegistrationSubmission
 ): data is WeekLongRegistration => data.mission_type === "week_long";
 
-
 export interface ApiRegistrationPayload {
   mission_id: number;
-  user_id?: string;                 
-  full_name: string;                 
+  user_id?: string;
+  full_name: string;
   phone_number: string;
   travelling_from: string;
   days_of_attendance?: Array<{
@@ -47,8 +48,8 @@ export interface ApiRegistrationPayload {
     day_date: string;
   }>;
   diet_advisory?: string;
-  need_facilitation: boolean;          
-  facilitation_amount: number;        
+  need_facilitation: boolean;
+  facilitation_amount: number;
   gender: Gender;
   coming_as_couple: boolean;
   partner_name?: string;
@@ -74,7 +75,6 @@ export type ApiErrorCode =
   | "MISSION_NOT_FOUND"
   | "PAYMENT_REQUIRED"
   | "INTERNAL_SERVER_ERROR";
-
 
 export interface RegistrationValidationError {
   field: keyof RegistrationSubmission;

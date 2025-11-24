@@ -26,7 +26,7 @@ export default function SuccessModal({
 }: SuccessModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-full max-w-md overflow-hidden rounded-3xl border border-emerald-100 bg-white p-8 sm:p-10 shadow-2xl ring-1 ring-emerald-100">
+      <DialogContent className="w-full max-w-md overflow-hidden rounded-3xl bg-white p-8 sm:p-10 shadow-2xl ring-1 ring-emerald-100">
 
         <div className="absolute left-0 right-0 top-0 h-2 bg-linear-to-r from-primary via-emerald-500 to-emerald-700" />
 

@@ -1,7 +1,7 @@
 import type { MissionType, FormField } from "../types";
 
 export const formTemplates: Record<MissionType, FormField[]> = {
-  "one-day": [
+  "one_day": [
     { name: "first_name", label: "First Name", type: "text", required: true },
     { name: "last_name", label: "Last Name", type: "text", required: true },
     { name: "phone_number", label: "Phone Number", type: "text", required: true },

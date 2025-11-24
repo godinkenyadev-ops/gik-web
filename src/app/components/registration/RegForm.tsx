@@ -7,6 +7,7 @@ import { submitRegistration } from "src/services/registrationService";
 import AlreadyRegistered from "./AlreadyRegistered";
 import { MissionSpecificSection, PaymentSection, PersonalInfoSection } from "./formsections";
 import SuccessModal from "./SuccessModal";
+import RegistrationFooter from "./RegistrationFooter";
 
 
 interface RegFormProps {
@@ -37,18 +38,21 @@ export default function RegForm({ missionData }: RegFormProps) {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log("Submit Clicked")
     setErrors({});
     setIsSubmitting(true);
 
     const { oneDaySchema, weekLongSchema } = getSchemas();
-    const schema = missionData.event_type === "one-day" ? oneDaySchema : weekLongSchema;
+    const schema = missionData.event_type === "one_day" ? oneDaySchema : weekLongSchema;
     const submissionData = {
       ...formData,
       mission_id: missionData.id,
       mission_type: missionData.event_type,
       travelling_from: formData.travelling_from || ""
     };
+    console.log(submissionData);
     const result = schema.safeParse(submissionData);
+    console.log(result);
 
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
@@ -81,12 +85,22 @@ export default function RegForm({ missionData }: RegFormProps) {
     }
   };
 
+  const closeSuccessModal = () => {
+    setShowSuccess(false);
+    resetForm(); 
+  };
+
+  const closeAlreadyRegistered = () => {
+    setShowAlreadyRegistered(false);
+    resetForm();
+  };
+
   if (showAlreadyRegistered) {
     return (
       <AlreadyRegistered
         firstName={submittedFirstName}
         missionTitle={missionData.title}
-        onTryAgain={resetForm}
+        onTryAgain={closeAlreadyRegistered}
       />
     );
   }
@@ -114,10 +128,6 @@ export default function RegForm({ missionData }: RegFormProps) {
           missionData={missionData}
         />
 
-        {errors.form && (
-          <p className="text-center text-sm text-rose-500">{errors.form}</p>
-        )}
-
         <button
           type="submit"
           disabled={isSubmitting}
@@ -127,9 +137,11 @@ export default function RegForm({ missionData }: RegFormProps) {
         </button>
       </form>
 
+      <RegistrationFooter />
+
       <SuccessModal 
         isOpen={showSuccess} 
-        onClose={resetForm} 
+        onClose={closeSuccessModal} 
         firstName={submittedFirstName || "Friend"} 
         missionTitle={missionData.title} 
       />

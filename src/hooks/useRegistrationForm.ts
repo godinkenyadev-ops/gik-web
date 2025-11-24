@@ -19,9 +19,10 @@ interface FormField {
 
 export function useRegistrationForm(missionData: MissionDetails) {
   const [formData, setFormData] = useState<Partial<RegistrationSubmission>>({
-    mission_id: missionData.id,
-    mission_type: missionData.event_type,
+    mission_id: Number(missionData.id),
+    mission_type: missionData.event_type === "week_long" ? "week_long" : undefined,
     can_pay_full: true,
+    attending_days: [],
   });
 
   const [fields, setFields] = useState<FormField[]>([]);
@@ -48,9 +49,10 @@ export function useRegistrationForm(missionData: MissionDetails) {
 
   const resetForm = () => {
     setFormData({
-      mission_id: missionData.id,
-      mission_type: missionData.event_type,
+      mission_id: Number(missionData.id),
+      mission_type: missionData.event_type === "week_long" ? "week_long" : undefined,
       can_pay_full: true,
+      attending_days: [],
     });
     setCanPayFullDisplay("Yes");
     setErrors({});
@@ -58,22 +60,17 @@ export function useRegistrationForm(missionData: MissionDetails) {
   };
 
   useEffect(() => {
-    // Determine mission type based on multiple criteria
-    const hasEndDate = missionData.end_date && missionData.end_date !== missionData.start_date;
-    const eventType = (missionData as any).event_type;
-    
-    console.log("Mission Data:", missionData);
-    console.log("Event Type:", eventType);
-    console.log("Has End Date:", hasEndDate);
-    
-    // Check if it's a week_long mission based on event_type or having different start/end dates
-    const missionType = (eventType === "week_long" || eventType === "week_long" || eventType === "retreat" || hasEndDate) ? "week_long" : "one-day";
-    
-    console.log("Determined Mission Type:", missionType);
-    
-    const template = formTemplates[missionType] ? [...formTemplates[missionType]] : [...formTemplates["one-day"]];
+    const isWeekLong = missionData.event_type === "week_long" ||
+      (missionData.end_date && missionData.end_date !== missionData.start_date);
 
-    if (missionType === "week_long" && missionData.end_date) {
+    const missionTypeKey = isWeekLong ? "week_long" : "one_day";   // ← use underscore!
+
+    // Use the correct key: "one_day", not "one-day"
+    const template = formTemplates[missionTypeKey]
+      ? [...formTemplates[missionTypeKey]]
+      : [...formTemplates["one_day"]];
+
+    if (isWeekLong && missionData.end_date) {
       const idx = template.findIndex(f => f.name === "attending_days");
       if (idx !== -1) {
         template[idx].options = generateDaysArray(missionData.start_date, missionData.end_date);
@@ -83,32 +80,47 @@ export function useRegistrationForm(missionData: MissionDetails) {
     setFields(template);
   }, [missionData]);
 
+
   const getSchemas = () => {
     const base = z.object({
-      mission_id: z.string().min(1),
+      mission_id: z.number(),
       first_name: z.string().min(2).max(25),
       last_name: z.string().min(2).max(25),
       phone_number: z.string().length(10).regex(/^\d{10}$/),
-      gender: z.enum(["Male", "Female"]),
+      gender: z.enum(["Male", "Female"] as const),
       travelling_from: z.string().optional(),
       dietary_watch: z.string().optional(),
       can_pay_full: z.boolean(),
       support_needed: z.string().optional(),
     });
-
-    const oneDay = base.extend({
-      mission_type: z.literal("one-day"),
-      mission_date: z.string().min(1),
+  
+    const oneDaySchema = base.extend({
+      mission_type: z.literal("one_day"),
+      mission_date: z.string().min(1, "Mission date is required"),
     });
-
-    const weekLong = base.extend({
+  
+    const weekLongSchema = base.extend({
       mission_type: z.literal("week_long"),
-      attending_days: z.array(z.string()).min(1, "Select at least one day"),
+      attending_days: z
+        .array(
+          z.object({
+            day: z.number().int().min(0),
+            day_date: z.string().date(), // Ensures valid YYYY-MM-DD
+          })
+        )
+        .min(1, "Please select at least one day")
+        // Optional: just ensure no duplicate days
+        .refine((days) => {
+          const daySet = new Set(days.map(d => d.day));
+          return daySet.size === days.length;
+        }, {
+          message: "You selected the same day multiple times",
+        }),
       coming_as_couple: z.boolean().optional(),
       partner_name: z.string().optional(),
     });
-
-    return { oneDaySchema: oneDay, weekLongSchema: weekLong };
+  
+    return { oneDaySchema, weekLongSchema };
   };
 
   const handleChange = (
@@ -123,7 +135,6 @@ export function useRegistrationForm(missionData: MissionDetails) {
     setFormData(prev => {
       const updated: Partial<RegistrationSubmission> = { ...prev };
 
-      // Common fields
       if (name === "first_name" || name === "last_name") {
         updated[name] = sanitizeName(value as string);
       } else if (name === "phone_number") {
@@ -143,7 +154,6 @@ export function useRegistrationForm(missionData: MissionDetails) {
         if (bool) delete (updated as any).support_needed;
       }
 
-      // Only allow week_long fields if this is a week_long mission
       const hasEndDate = missionData.end_date && missionData.end_date !== missionData.start_date;
       const eventType = (missionData as any).event_type;
       const isWeekLong = eventType === "week_long" || eventType === "week_long" || hasEndDate;
@@ -155,7 +165,7 @@ export function useRegistrationForm(missionData: MissionDetails) {
         } else if (name === "partner_name") {
           (updated as any).partner_name = sanitizeName(value as string);
         } else if (name === "attending_days") {
-          (updated as any).attending_days = value as string[];
+          (updated as any).attending_days = value;
         }
       }
 

@@ -9,9 +9,9 @@ export const registrationApi = {
   },
 
   async createParticipant(data: ApiRegistrationPayload): Promise<{ success: boolean; message: string }> {
-    return postJson<{ success: boolean; message: string }, Record<string, unknown>>(
+    return postJson<{ success: boolean; message: string }, ApiRegistrationPayload >(
       `${API_BASE_URL}/api/missions/participants/create/`,
-      data as unknown as Record<string, unknown>
+      data
     );
   },
 };
