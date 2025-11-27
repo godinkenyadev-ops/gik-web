@@ -1,5 +1,5 @@
 import { SelectInput, TextInput } from "../formfields";
-import type { RegistrationSubmission, MissionDetails } from "../../../../types";
+import type { RegistrationSubmission, MissionEventDetails } from "../../../../types";
 
 interface PaymentSectionProps {
   formData: Partial<RegistrationSubmission> & {
@@ -9,7 +9,7 @@ interface PaymentSectionProps {
   };
   errors: Record<string, string>;
   onChange: (field: string, value: string | boolean | string[]) => void;
-  missionData: MissionDetails;
+  missionData: MissionEventDetails;
 }
 
 export function PaymentSection({ formData, errors, onChange, missionData }: PaymentSectionProps) {

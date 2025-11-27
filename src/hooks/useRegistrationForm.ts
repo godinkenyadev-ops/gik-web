@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { z } from "zod";
 import {
   type Gender,
-  type MissionDetails,
+  type MissionEventDetails,
   type RegistrationSubmission,
-  isWeekLongRegistration,
+  type WeekLongRegistration,
 } from "../types";
 import { formTemplates } from "src/config/formTemplates";
 
@@ -17,7 +17,7 @@ interface FormField {
   show_if?: { field: string; value: string | boolean };
 }
 
-export function useRegistrationForm(missionData: MissionDetails) {
+export function useRegistrationForm(missionData: MissionEventDetails) {
   const [formData, setFormData] = useState<Partial<RegistrationSubmission>>({
     mission_id: Number(missionData.id),
     mission_type: missionData.event_type === "week_long" ? "week_long" : undefined,
@@ -32,7 +32,7 @@ export function useRegistrationForm(missionData: MissionDetails) {
 
   const generateDaysArray = (start: string, end: string): string[] => {
     const days: string[] = [];
-    let current = new Date(start);
+    const current = new Date(start);
     const endDate = new Date(end);
     while (current <= endDate) {
       days.push(current.toISOString().split("T")[0]);
@@ -48,12 +48,13 @@ export function useRegistrationForm(missionData: MissionDetails) {
   const sanitizeAmount = (v: string) => v.replace(/[^0-9]/g, "");
 
   const resetForm = () => {
-    setFormData({
+    const initialFormData: Partial<RegistrationSubmission> = {
       mission_id: Number(missionData.id),
-      mission_type: missionData.event_type === "week_long" ? "week_long" : undefined,
+      mission_type: missionData.event_type === "week_long" ? "week_long" as const : undefined,
       can_pay_full: true,
       attending_days: [],
-    });
+    };
+    setFormData(initialFormData);
     setCanPayFullDisplay("Yes");
     setErrors({});
     formRef.current?.reset();
@@ -63,9 +64,8 @@ export function useRegistrationForm(missionData: MissionDetails) {
     const isWeekLong = missionData.event_type === "week_long" ||
       (missionData.end_date && missionData.end_date !== missionData.start_date);
 
-    const missionTypeKey = isWeekLong ? "week_long" : "one_day";   // ← use underscore!
+    const missionTypeKey = isWeekLong ? "week_long" : "one_day";
 
-    // Use the correct key: "one_day", not "one-day"
     const template = formTemplates[missionTypeKey]
       ? [...formTemplates[missionTypeKey]]
       : [...formTemplates["one_day"]];
@@ -79,7 +79,6 @@ export function useRegistrationForm(missionData: MissionDetails) {
 
     setFields(template);
   }, [missionData]);
-
 
   const getSchemas = () => {
     const base = z.object({
@@ -105,11 +104,10 @@ export function useRegistrationForm(missionData: MissionDetails) {
         .array(
           z.object({
             day: z.number().int().min(0),
-            day_date: z.string().date(), // Ensures valid YYYY-MM-DD
+            day_date: z.string().date(),
           })
         )
         .min(1, "Please select at least one day")
-        // Optional: just ensure no duplicate days
         .refine((days) => {
           const daySet = new Set(days.map(d => d.day));
           return daySet.size === days.length;
@@ -128,8 +126,9 @@ export function useRegistrationForm(missionData: MissionDetails) {
     value: string | boolean | string[]
   ) => {
     setErrors(prev => {
-      const { [name]: _, ...rest } = prev;
-      return rest;
+      const updated = { ...prev };
+      delete updated[name];
+      return updated;
     });
 
     setFormData(prev => {
@@ -151,21 +150,26 @@ export function useRegistrationForm(missionData: MissionDetails) {
         const bool = typeof value === "string" ? value === "Yes" : !!value;
         updated.can_pay_full = bool;
         setCanPayFullDisplay(bool ? "Yes" : "No");
-        if (bool) delete (updated as any).support_needed;
+        if (bool) {
+          delete updated.support_needed;
+        }
       }
 
       const hasEndDate = missionData.end_date && missionData.end_date !== missionData.start_date;
-      const eventType = (missionData as any).event_type;
-      const isWeekLong = eventType === "week_long" || eventType === "week_long" || hasEndDate;
+      const isWeekLong = missionData.event_type === "week_long" || hasEndDate;
       
       if (isWeekLong) {
+        const weekLongData = updated as Partial<WeekLongRegistration>;
+        
         if (name === "coming_as_couple") {
-          (updated as any).coming_as_couple = value as boolean;
-          if (!value) delete (updated as any).partner_name;
+          weekLongData.coming_as_couple = value as boolean;
+          if (!value) {
+            delete weekLongData.partner_name;
+          }
         } else if (name === "partner_name") {
-          (updated as any).partner_name = sanitizeName(value as string);
+          weekLongData.partner_name = sanitizeName(value as string);
         } else if (name === "attending_days") {
-          (updated as any).attending_days = value;
+          weekLongData.attending_days = value as WeekLongRegistration["attending_days"];
         }
       }
 
@@ -175,7 +179,9 @@ export function useRegistrationForm(missionData: MissionDetails) {
 
   const shouldShowField = (field: FormField): boolean => {
     if (!field.show_if) return true;
-    return (formData as any)[field.show_if.field] === field.show_if.value;
+    
+    const fieldValue = formData[field.show_if.field as keyof Partial<RegistrationSubmission>];
+    return fieldValue === field.show_if.value;
   };
 
   return {

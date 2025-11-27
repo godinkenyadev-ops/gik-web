@@ -18,7 +18,7 @@ export default function AlreadyRegistered({ firstName, missionTitle, onTryAgain 
         Already Registered!
       </h3>
       <p className="mb-6 text-emerald-700">
-        Hi {firstName}! You're already registered for <strong>{missionTitle}</strong>. 
+        Hi {firstName}! You&apos;re already registered for <strong>{missionTitle}</strong>. 
         We have your details on file.
       </p>      
       <button

@@ -1,6 +1,6 @@
 import { registrationApi } from "@/lib/registrationApi";
 import {
-  type MissionDetails,
+  type MissionEventDetails,
   type RegistrationSubmission,
   type ApiRegistrationPayload,
   type Gender,
@@ -10,7 +10,7 @@ import {
 
 export async function submitRegistration(
   formData: RegistrationSubmission,
-  missionData: MissionDetails
+  missionData: MissionEventDetails
 ): Promise<void> {
   try {
     const payload = transformFormDataToApiPayload(formData, missionData);
@@ -18,6 +18,7 @@ export async function submitRegistration(
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Registration failed";
+      console.log(message)
 
     if (
       message.toLowerCase().includes("already registered") ||
@@ -32,7 +33,7 @@ export async function submitRegistration(
 
 function transformFormDataToApiPayload(
   formData: RegistrationSubmission,
-  missionData: MissionDetails
+  missionData: MissionEventDetails
 ): ApiRegistrationPayload {
   const fullName = `${formData.first_name} ${formData.last_name}`.trim();
   const gender = formData.gender.toLowerCase() as Gender;
@@ -66,27 +67,4 @@ function transformFormDataToApiPayload(
     coming_as_couple: comingAsCouple,
     partner_name: partnerName,
   };
-}
-
-function transformWeekLongDays(
-  attendingDays: string[],
-  startDateStr: string
-): Array<{ day: number; day_date: string }> {
-  const start = new Date(startDateStr);
-  const dateToDay = new Map<string, number>();
-
-  for (let i = 0; i < 7; i++) {
-    const current = new Date(start);
-    current.setDate(start.getDate() + i);
-    const dateStr = current.toISOString().split("T")[0];
-    dateToDay.set(dateStr, i);
-  }
-
-  return attendingDays
-    .filter((day) => dateToDay.has(day))
-    .map((day) => ({
-      day: dateToDay.get(day)!,
-      day_date: day,
-    }))
-    .sort((a, b) => a.day - b.day);
 }

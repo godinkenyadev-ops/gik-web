@@ -1,7 +1,8 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import type { MissionDetails } from "../../../types";
+import { toast } from "sonner";
+import type { MissionEventDetails } from "../../../types";
 import { useRegistrationForm } from "src/hooks/useRegistrationForm";
 import { submitRegistration } from "src/services/registrationService";
 import AlreadyRegistered from "./AlreadyRegistered";
@@ -10,8 +11,9 @@ import SuccessModal from "./SuccessModal";
 import RegistrationFooter from "./RegistrationFooter";
 
 
+
 interface RegFormProps {
-  missionData: MissionDetails;
+  missionData: MissionEventDetails;
 }
 
 export default function RegForm({ missionData }: RegFormProps) {
@@ -22,7 +24,6 @@ export default function RegForm({ missionData }: RegFormProps) {
     handleChange,
     resetForm,
     getSchemas,
-    shouldShowField,
     setErrors
   } = useRegistrationForm(missionData);
 
@@ -30,11 +31,7 @@ export default function RegForm({ missionData }: RegFormProps) {
   const [showAlreadyRegistered, setShowAlreadyRegistered] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedFirstName, setSubmittedFirstName] = useState<string>("");
-
-  const isCouple = (formData as any).coming_as_couple === true;
-  const displayedFee = isCouple
-    ? missionData.couple_registration_fee ?? missionData.registration_fee ?? 0
-    : missionData.registration_fee ?? 0;
+  const [daysResetKey, setDaysResetKey] = useState(0);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -60,6 +57,7 @@ export default function RegForm({ missionData }: RegFormProps) {
         const path = error.path[0] as string;
         fieldErrors[path] = error.message;
       });
+      console.log(result);
       setErrors(fieldErrors);
       const firstErrorField = Object.keys(fieldErrors)[0];
       document.querySelector(`[name="${firstErrorField}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -68,32 +66,42 @@ export default function RegForm({ missionData }: RegFormProps) {
     }
 
     try {
-      await submitRegistration(result.data as any, missionData);
-      setSubmittedFirstName(result.data.first_name);
+      const data = result.data;
+      const response:any = await submitRegistration(data, missionData);
+      setSubmittedFirstName(data.first_name);
+      clearSelectedDays();
       setShowSuccess(true);
+      console.log(response);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Registration failed";
+      console.log(result);
 
       if (errorMessage === "already_registered") {
         setSubmittedFirstName(result.data.first_name);
         setShowAlreadyRegistered(true);
       } else {
-        setErrors({ form: errorMessage });
+        toast.error(errorMessage);
       }
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const closeSuccessModal = () => {
-    setShowSuccess(false);
-    resetForm(); 
+  const clearSelectedDays = () => {
+    setDaysResetKey(prev => prev + 1);
   };
 
-  const closeAlreadyRegistered = () => {
-    setShowAlreadyRegistered(false);
+  const closeSuccessModal = () => {
+    setShowSuccess(false);
     resetForm();
+    clearSelectedDays();
   };
+
+const closeAlreadyRegistered = () => {
+  setShowAlreadyRegistered(false);
+  resetForm();
+  setDaysResetKey(prev => prev + 1);
+};
 
   if (showAlreadyRegistered) {
     return (
@@ -116,6 +124,7 @@ export default function RegForm({ missionData }: RegFormProps) {
         
         <MissionSpecificSection 
           formData={formData}
+          key={daysResetKey}
           errors={errors}
           onChange={handleChange}
           missionData={missionData}
@@ -143,7 +152,6 @@ export default function RegForm({ missionData }: RegFormProps) {
         isOpen={showSuccess} 
         onClose={closeSuccessModal} 
         firstName={submittedFirstName || "Friend"} 
-        missionTitle={missionData.title} 
       />
     </>
   );

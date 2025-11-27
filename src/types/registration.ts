@@ -1,5 +1,3 @@
-import type { Gender } from "./mission";
-
 export type RegistrationSubmission = OneDayRegistration | WeekLongRegistration;
 
 interface BaseRegistration {
@@ -110,3 +108,35 @@ export interface FormField {
   options?: string[];
   show_if?: { field: string; value: string | boolean };
 }
+
+export type Gender = "male" | "female";
+export type MissionType = "one_day" | "week_long";
+
+export interface MissionEventDetails {
+  id: number;
+  created_at: string; 
+  updated_at: string;
+  title: string;
+  description: string;
+  category_name: string;
+  location_name: string;
+  start_date: string; 
+  end_date: string;
+  status: 'planning' | 'ongoing' | 'completed' | 'cancelled' | 'postponed';
+  partnering_organization: string[];
+  event_type: string;
+  registration_close_date: string;
+  registration_fee_required: boolean;
+  registration_fee: number; 
+  couple_registration_fee: number;
+  is_registration_open: boolean;
+  total_souls_won: number | string; 
+}
+
+export const isOneDayMission = (
+  m: MissionEventDetails
+): m is MissionEventDetails & { mission_type: "one_day" } => m.event_type === "one_day";
+
+export const isWeekLongMission = (
+  m: MissionEventDetails
+): m is MissionEventDetails & { mission_type: "week_long" } => m.event_type === "week_long";

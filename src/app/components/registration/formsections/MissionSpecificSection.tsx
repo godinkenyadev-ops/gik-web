@@ -1,5 +1,5 @@
 import { TextInput, DateInput, CheckboxInput, DaysMultiSelect, TextAreaInput } from "../formfields";
-import { RegistrationSubmission, MissionDetails } from "../../../../types";
+import { RegistrationSubmission, MissionEventDetails } from "../../../../types";
 import { eachDayOfInterval, format } from "date-fns";
 
 interface MissionSpecificSectionProps {
@@ -11,7 +11,7 @@ interface MissionSpecificSectionProps {
   };
   errors: Record<string, string>;
   onChange: (field: string, value: any) => void;
-  missionData: MissionDetails;
+  missionData: MissionEventDetails;
 }
 
 const getMissionDays = (start: string, end: string): string[] => {

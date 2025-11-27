@@ -10,8 +10,19 @@ type FetchOptions = RequestInit & {
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
-    const message = await response.text();
-    throw new Error(message || `Request failed with status ${response.status}`);
+    const text = await response.text();
+    let message = text || `Request failed with status ${response.status}`;
+    
+    try {
+      const errorData = JSON.parse(text);
+      if (errorData.detail) {
+        message = errorData.detail;
+      }
+    } catch {
+      // Keep original message if not JSON
+    }
+    
+    throw new Error(message);
   }
 
   const contentType = response.headers.get("content-type") ?? "";

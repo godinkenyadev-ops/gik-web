@@ -16,7 +16,6 @@ export function DaysMultiSelect({
   days,
   selectedDays,
   onChange,
-  error,
 }: DaysMultiSelectProps) {
 
   const formatDateForDisplay = (dateStr: string): string => {

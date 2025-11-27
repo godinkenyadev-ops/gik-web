@@ -7,6 +7,7 @@ import { canonicalUrl, jsonLdString, missionRegistrationJsonLd } from "@/lib/seo
 import { CalendarDays, MapPin } from "lucide-react"
 import Image from "next/image";
 import RegForm from "@/app/components/registration/RegForm";
+import { MissionEventDetails } from "@/types/registration";
 
 
 interface RegistrationPageProps {
@@ -45,7 +46,7 @@ export async function generateMetadata({ params }: RegistrationPageProps): Promi
 export default async function RegistrationPage({ params }: RegistrationPageProps) {
   const { missionId } = await params;
   
-  let mission: any;
+  let mission: MissionEventDetails;
   try {
     mission = await registrationApi.getMissionPublic(decodeURIComponent(missionId));
     console.log(mission);
@@ -130,7 +131,7 @@ export default async function RegistrationPage({ params }: RegistrationPageProps
             </p>
 
             <div className="mt-10">
-              <RegForm missionData={mission as any} />
+              <RegForm missionData={mission} />
             </div>
           </div>
         </div>
