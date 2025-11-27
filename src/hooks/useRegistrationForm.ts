@@ -123,9 +123,10 @@ export function useRegistrationForm(missionData: MissionEventDetails) {
 
   const handleChange = (
     name: string,
-    value: string | boolean | string[]
+    value: string | boolean | { day: number; day_date: string }[]
   ) => {
     setErrors(prev => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { [name]: _, ...updated } = prev;
       return updated;
     });

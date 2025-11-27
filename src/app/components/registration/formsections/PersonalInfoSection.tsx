@@ -4,7 +4,7 @@ import type { RegistrationSubmission } from "../../../../types";
 interface PersonalInfoSectionProps {
   formData: Partial<RegistrationSubmission>;
   errors: Record<string, string>;
-  onChange: (field: keyof RegistrationSubmission, value: string | boolean | string[]) => void;
+  onChange: (field: string, value: string | boolean | { day: number; day_date: string }[]) => void;
 }
 
 export function PersonalInfoSection({ formData, errors, onChange }: PersonalInfoSectionProps) {

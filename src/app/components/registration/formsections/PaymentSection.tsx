@@ -8,7 +8,7 @@ interface PaymentSectionProps {
     coming_as_couple?: boolean;
   };
   errors: Record<string, string>;
-  onChange: (field: string, value: string | boolean | string[]) => void;
+  onChange: (field: string, value: string | boolean | { day: number; day_date: string }[]) => void;
   missionData: MissionEventDetails;
 }
 

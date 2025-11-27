@@ -3,6 +3,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 
 
 interface SelectInputProps {
+  name?: string;
   label: string;
   required?: boolean;
   value: string;
@@ -13,6 +14,7 @@ interface SelectInputProps {
 }
 
 export function SelectInput({ 
+  name,
   label, 
   required, 
   value, 
@@ -29,6 +31,7 @@ export function SelectInput({
       </label>
       <Select value={value} onValueChange={onChange}>
         <SelectTrigger
+          name={name}
           className={cn(
             "h-11 sm:h-12 w-full rounded-2xl border px-4 py-3 text-base text-slate-900 shadow-sm bg-white transition-all",
             "focus:ring-2 focus:ring-primary/20 focus:border-primary",
