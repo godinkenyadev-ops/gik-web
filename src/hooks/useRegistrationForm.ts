@@ -41,7 +41,7 @@ export function useRegistrationForm(missionData: MissionEventDetails) {
     return days;
   };
 
-  const sanitizeName = (v: string) => v.replace(/[^a-zA-Z\s'.-]/g, "").replace(/\s+/g, " ").trim().slice(0, 25);
+  const sanitizeName = (v: string) => v.replace(/[^a-zA-Z\s'.-]/g, "").replace(/\s+/g, " ").slice(0, 25);
   const sanitizePhone = (v: string) => v.replace(/\D/g, "").slice(0, 10);
   const sanitizeLocation = (v: string) => v.replace(/[^a-zA-Z0-9\s.,/\-()&]/g, "").slice(0, 25);
   const sanitizeText = (v: string) => v.slice(0, 500);
@@ -83,8 +83,8 @@ export function useRegistrationForm(missionData: MissionEventDetails) {
   const getSchemas = () => {
     const base = z.object({
       mission_id: z.number(),
-      first_name: z.string().min(2).max(25),
-      last_name: z.string().min(2).max(25),
+      first_name: z.string().min(2).max(25).regex(/^[a-zA-Z\s'.-]+$/, "Only letters, spaces, apostrophes, periods, and hyphens allowed"),
+      surname: z.string().min(2).max(25).regex(/^[a-zA-Z\s'.-]+$/, "Only letters, spaces, apostrophes, periods, and hyphens allowed"),
       phone_number: z.string().length(10).regex(/^\d{10}$/),
       gender: z.enum(["male", "female"] as const),
       travelling_from: z.string().optional(),
@@ -133,7 +133,7 @@ export function useRegistrationForm(missionData: MissionEventDetails) {
     setFormData(prev => {
       const updated: Partial<RegistrationSubmission> = { ...prev };
 
-      if (name === "first_name" || name === "last_name") {
+      if (name === "first_name" || name === "surname") {
         updated[name] = sanitizeName(value as string);
       } else if (name === "phone_number") {
         updated.phone_number = sanitizePhone(value as string);

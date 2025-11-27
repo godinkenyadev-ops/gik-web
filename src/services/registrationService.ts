@@ -34,7 +34,7 @@ function transformFormDataToApiPayload(
   formData: RegistrationSubmission,
   missionData: MissionEventDetails
 ): ApiRegistrationPayload {
-  const fullName = `${formData.first_name} ${formData.last_name}`.trim();
+  const fullName = `${formData.first_name} ${formData.surname}`.trim();
   const gender = formData.gender.toLowerCase() as Gender;
 
   const daysOfAttendance = isOneDayRegistration(formData)

@@ -22,12 +22,12 @@ export function PersonalInfoSection({ formData, errors, onChange }: PersonalInfo
         />
         
         <TextInput
-          name="last_name"
-          label="Last Name"
+          name="surname"
+          label="Other Name(s)"
           required
-          value={formData.last_name || ""}
-          onChange={(value) => onChange("last_name", value)}
-          error={errors.last_name}
+          value={formData.surname || ""}
+          onChange={(value) => onChange("surname", value)}
+          error={errors.surname}
         />
       </div>
       

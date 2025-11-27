@@ -3,7 +3,7 @@ export type RegistrationSubmission = OneDayRegistration | WeekLongRegistration;
 interface BaseRegistration {
   mission_id: number;                   
   first_name: string;
-  last_name: string;
+  surname: string;
   phone_number: string;
   gender: Gender;
   travelling_from?: string;              

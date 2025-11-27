@@ -3,7 +3,7 @@ import type { MissionType, FormField } from "../types";
 export const formTemplates: Record<MissionType, FormField[]> = {
   "one_day": [
     { name: "first_name", label: "First Name", type: "text", required: true },
-    { name: "last_name", label: "Last Name", type: "text", required: true },
+    { name: "surname", label: "Other Name(s)", type: "text", required: true },
     { name: "phone_number", label: "Phone Number", type: "text", required: true },
     { name: "gender", label: "Gender", type: "select", options: ["male", "female"], required: true },
     { name: "mission_date", label: "Mission Date", type: "date" },
@@ -19,7 +19,7 @@ export const formTemplates: Record<MissionType, FormField[]> = {
   ],
   "week_long": [
     { name: "first_name", label: "First Name", type: "text", required: true },
-    { name: "last_name", label: "Last Name", type: "text", required: true },
+    { name: "surname", label: "Other Name(s)", type: "text", required: true },
     { name: "phone_number", label: "Phone Number", type: "text", required: true },
     { name: "gender", label: "Gender", type: "select", options: ["male", "female"], required: true },
     { name: "coming_as_couple", label: "Coming as a couple?", type: "checkbox" },
