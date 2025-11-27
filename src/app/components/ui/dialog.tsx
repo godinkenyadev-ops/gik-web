@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext} from "react";
 import { createPortal } from "react-dom";
 import type { ReactNode } from "react";
 
@@ -34,13 +34,8 @@ interface DialogContentProps {
 
 export function DialogContent({ children, className }: DialogContentProps) {
   const { open, onOpenChange } = useDialogContext();
-  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted || !open) return null;
+  if (!open) return null;
 
   return createPortal(
     <div

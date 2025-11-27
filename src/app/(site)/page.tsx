@@ -1,4 +1,4 @@
-import ComingSoon from '../components/registration/coming-soon/ComingSoon';
+import ComingSoon from '../components/coming-soon/ComingSoon';
 
 export default function Home() {
 

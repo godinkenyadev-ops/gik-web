@@ -15,18 +15,16 @@ interface SuccessModalProps {
   isOpen: boolean;
   onClose: () => void;
   firstName: string;
-  missionTitle: string;
 }
 
 export default function SuccessModal({
   isOpen,
   onClose,
   firstName,
-  missionTitle,
 }: SuccessModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="w-full max-w-md overflow-hidden rounded-3xl border border-emerald-100 bg-white p-8 sm:p-10 shadow-2xl ring-1 ring-emerald-100">
+      <DialogContent className="w-full max-w-md overflow-hidden rounded-3xl bg-white p-8 sm:p-10 shadow-2xl">
 
         <div className="absolute left-0 right-0 top-0 h-2 bg-linear-to-r from-primary via-emerald-500 to-emerald-700" />
 
@@ -70,7 +68,7 @@ export default function SuccessModal({
               className="group relative overflow-hidden rounded-full bg-linear-to-r from-primary to-emerald-700 px-10 py-6 text-lg font-bold text-white shadow-lg shadow-emerald-300/40 transition-all duration-300 hover:brightness-110 hover:shadow-xl focus-visible:ring-4 focus-visible:ring-emerald-300"
             >
               <span className="relative z-10 flex items-center gap-3">
-                <IoCheckmarkCircle className="h-6 w-6 transition-transform group-hover:scale-110" />
+                <IoCheckmarkCircle className="h-8 w-8 md:h-10 md:w-10 transition-transform group-hover:scale-110" />
                 Praise God! I&apos;m Ready
               </span>
               <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-700 group-hover:translate-x-full" />

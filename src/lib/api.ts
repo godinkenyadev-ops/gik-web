@@ -10,8 +10,19 @@ type FetchOptions = RequestInit & {
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
-    const message = await response.text();
-    throw new Error(message || `Request failed with status ${response.status}`);
+    const text = await response.text();
+    let message = text || `Request failed with status ${response.status}`;
+    
+    try {
+      const errorData = JSON.parse(text);
+      if (errorData.detail) {
+        message = errorData.detail;
+      }
+    } catch {
+      // Keep original message if not JSON
+    }
+    
+    throw new Error(message);
   }
 
   const contentType = response.headers.get("content-type") ?? "";
@@ -35,7 +46,7 @@ export async function getJson<T>(endpoint: string, options: FetchOptions = {}): 
   return handleResponse<T>(response);
 }
 
-export async function postJson<TResponse, TBody extends Record<string, unknown>>(
+export async function postJson<TResponse, TBody extends object = object>(
   endpoint: string,
   body: TBody,
   options: FetchOptions = {}
@@ -46,9 +57,10 @@ export async function postJson<TResponse, TBody extends Record<string, unknown>>
     body: JSON.stringify(body),
     headers: {
       ...defaultHeaders,
-      ...options.headers
-    }
+      ...options.headers,
+    },
   });
 
   return handleResponse<TResponse>(response);
 }
+

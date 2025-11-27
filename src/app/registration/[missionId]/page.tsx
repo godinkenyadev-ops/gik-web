@@ -1,54 +1,58 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getMissionById, MISSIONS } from "@/data/missions";
-import DynamicRegForm from "@/app/components/registration/DynamicRegForm";
+import { registrationApi } from "@/lib/registrationApi";
+
 import RegistrationClosed from "@/app/components/registration/RegistrationClosed";
 import { canonicalUrl, jsonLdString, missionRegistrationJsonLd } from "@/lib/seo";
 import { CalendarDays, MapPin } from "lucide-react"
 import Image from "next/image";
+import RegForm from "@/app/components/registration/RegForm";
+import { MissionEventDetails } from "@/types/registration";
 
 
 interface RegistrationPageProps {
   params: Promise<{ missionId: string }>;
 }
 
-export async function generateStaticParams() {
-  return MISSIONS.map((mission) => ({ missionId: mission.id }));
-}
-
 export async function generateMetadata({ params }: RegistrationPageProps): Promise<Metadata> {
   const { missionId } = await params;
-  const mission = getMissionById(decodeURIComponent(missionId));
+  
+  try {
+    const mission = await registrationApi.getMissionPublic(decodeURIComponent(missionId));
+    
+    const title = `Register for ${mission.title} | God in Kenya Missions`;
+    const description = mission.description ?? "Join an upcoming mission with God in Kenya Missions.";
 
-  if (!mission) {
+    return {
+      title,
+      description,
+      alternates: { canonical: canonicalUrl(`/registration/${mission.id}`) },
+      openGraph: {
+        title,
+        description,
+        url: canonicalUrl(`/registration/${mission.id}`),
+        type: "website",
+      },
+      twitter: { card: "summary_large_image", title, description },
+    };
+  } catch {
     return {
       title: "Mission Not Found | God in Kenya Missions",
       description: "This mission is unavailable.",
     };
   }
-
-  const title = `Register for ${mission.title} | God in Kenya Missions`;
-  const description = mission.description ?? "Join an upcoming mission with God in Kenya Missions.";
-
-  return {
-    title,
-    description,
-    alternates: { canonical: canonicalUrl(`/registration/${mission.id}`) },
-    openGraph: {
-      title,
-      description,
-      url: canonicalUrl(`/registration/${mission.id}`),
-      type: "website",
-    },
-    twitter: { card: "summary_large_image", title, description },
-  };
 }
 
 export default async function RegistrationPage({ params }: RegistrationPageProps) {
   const { missionId } = await params;
-  const mission = getMissionById(decodeURIComponent(missionId));
-
-  if (!mission) notFound();
+  
+  let mission: MissionEventDetails;
+  try {
+    mission = await registrationApi.getMissionPublic(decodeURIComponent(missionId));
+    console.log(mission);
+  } catch {
+    notFound();
+  }
 
   const now = new Date();
   const closeDate = new Date(mission.registration_close_date);
@@ -63,19 +67,19 @@ export default async function RegistrationPage({ params }: RegistrationPageProps
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
-      })} – ${new Date(mission.end_date).toLocaleDateString("en-GB", {
+      })} - ${new Date(mission.end_date).toLocaleDateString("en-GB", {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
       })}`
       : new Date(mission.start_date).toLocaleDateString("en-GB", {
         day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
+        month: "2-digit",        year: "numeric",
       });
 
+
   return (
-    <section className="min-h-screen bg-linear-to-br from-teal-50 via-emerald-50 to-orange-50 px-4 py-4 md:py-10 sm:px-0">
+    <section className="min-h-screen bg-linear-to-br from-teal-50 via-emerald-50 to-orange-50 px-6 py-4 md:py-10">
       <div className="mx-auto max-w-4xl">
         <div className="rounded-3xl bg-white shadow-[0_40px_80px_rgba(0,0,0,0.12)]">
 
@@ -113,7 +117,7 @@ export default async function RegistrationPage({ params }: RegistrationPageProps
 
                 <div className="flex items-center gap-2">
                   <MapPin className="size-5 text-white/90" />
-                  <span>{mission.location}</span>
+                  <span>{mission.location_name}</span>
                 </div>
               </div>
             </div>
@@ -127,7 +131,7 @@ export default async function RegistrationPage({ params }: RegistrationPageProps
             </p>
 
             <div className="mt-10">
-              <DynamicRegForm missionData={mission} />
+              <RegForm missionData={mission} />
             </div>
           </div>
         </div>
@@ -136,7 +140,7 @@ export default async function RegistrationPage({ params }: RegistrationPageProps
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: jsonLdString(missionRegistrationJsonLd(mission.id)),
+          __html: jsonLdString(missionRegistrationJsonLd(String(mission.id))),
         }}
       />
     </section>
