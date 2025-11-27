@@ -124,7 +124,7 @@ export interface MissionEventDetails {
   end_date: string;
   status: 'planning' | 'ongoing' | 'completed' | 'cancelled' | 'postponed';
   partnering_organization: string[];
-  event_type: string;
+  event_type: MissionType;
   registration_close_date: string;
   registration_fee_required: boolean;
   registration_fee: number; 
@@ -135,8 +135,8 @@ export interface MissionEventDetails {
 
 export const isOneDayMission = (
   m: MissionEventDetails
-): m is MissionEventDetails & { mission_type: "one_day" } => m.event_type === "one_day";
+): m is MissionEventDetails & { event_type: "one_day" } => m.event_type === "one_day";
 
 export const isWeekLongMission = (
   m: MissionEventDetails
-): m is MissionEventDetails & { mission_type: "week_long" } => m.event_type === "week_long";
+): m is MissionEventDetails & { event_type: "week_long" } => m.event_type === "week_long";

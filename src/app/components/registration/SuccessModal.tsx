@@ -67,7 +67,7 @@ export default function SuccessModal({
               size="lg"
               className="group relative overflow-hidden rounded-full bg-linear-to-r from-primary to-emerald-700 px-10 py-6 text-lg font-bold text-white shadow-lg shadow-emerald-300/40 transition-all duration-300 hover:brightness-110 hover:shadow-xl focus-visible:ring-4 focus-visible:ring-emerald-300"
             >
-              <span className="relative z-10 flex items-center gap-3 ">
+              <span className="relative z-10 flex items-center gap-3">
                 <IoCheckmarkCircle className="h-8 w-8 md:h-10 md:w-10 transition-transform group-hover:scale-110" />
                 Praise God! I&apos;m Ready
               </span>

@@ -3,7 +3,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 
 
 interface SelectInputProps {
-  name: string;
   label: string;
   required?: boolean;
   value: string;
@@ -14,7 +13,6 @@ interface SelectInputProps {
 }
 
 export function SelectInput({ 
-  name, 
   label, 
   required, 
   value, 

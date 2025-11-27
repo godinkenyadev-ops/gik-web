@@ -49,7 +49,7 @@ export function PersonalInfoSection({ formData, errors, onChange }: PersonalInfo
         required
         value={formData.gender || ""}
         onChange={(value) => onChange("gender", value)}
-        options={["Male", "Female"]}
+        options={["male", "female"]}
         error={errors.gender}
       />
     </div>

@@ -18,7 +18,6 @@ export async function submitRegistration(
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Registration failed";
-      console.log(message)
 
     if (
       message.toLowerCase().includes("already registered") ||

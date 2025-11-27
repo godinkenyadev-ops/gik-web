@@ -46,7 +46,7 @@ export function DaysMultiSelect({
     if (selectedDateSet.has(date)) {
       onChange(selectedDays.filter((d) => d.day_date !== date));
     } else {
-      onChange([...selectedDays, { day: dayIndex, day_date: date }]);
+      onChange([...selectedDays, { day: dayIndex + 1, day_date: date }]);
     }
   };
 

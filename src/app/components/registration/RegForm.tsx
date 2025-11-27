@@ -47,9 +47,7 @@ export default function RegForm({ missionData }: RegFormProps) {
       mission_type: missionData.event_type,
       travelling_from: formData.travelling_from || ""
     };
-    console.log(submissionData);
     const result = schema.safeParse(submissionData);
-    console.log(result);
 
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
@@ -67,14 +65,12 @@ export default function RegForm({ missionData }: RegFormProps) {
 
     try {
       const data = result.data;
-      const response:any = await submitRegistration(data, missionData);
+      await submitRegistration(data, missionData);
       setSubmittedFirstName(data.first_name);
       clearSelectedDays();
       setShowSuccess(true);
-      console.log(response);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Registration failed";
-      console.log(result);
 
       if (errorMessage === "already_registered") {
         setSubmittedFirstName(result.data.first_name);
@@ -140,7 +136,7 @@ const closeAlreadyRegistered = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded-2xl bg-primary px-5 py-3 text-sm text-white sm:text-base font-semibold shadow-[0_4px_12px_rgba(0,81,63,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
+          className="w-full rounded-2xl bg-primary px-5 py-3 hover:cursor-pointer text-sm text-white sm:text-base font-semibold shadow-[0_4px_12px_rgba(0,81,63,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary/90 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none"
         >
           {isSubmitting ? "Submitting..." : "Submit Registration"}
         </button>

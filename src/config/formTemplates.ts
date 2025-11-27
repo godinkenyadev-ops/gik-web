@@ -5,7 +5,7 @@ export const formTemplates: Record<MissionType, FormField[]> = {
     { name: "first_name", label: "First Name", type: "text", required: true },
     { name: "last_name", label: "Last Name", type: "text", required: true },
     { name: "phone_number", label: "Phone Number", type: "text", required: true },
-    { name: "gender", label: "Gender", type: "select", options: ["Male", "Female"], required: true },
+    { name: "gender", label: "Gender", type: "select", options: ["male", "female"], required: true },
     { name: "mission_date", label: "Mission Date", type: "date" },
     { name: "can_pay_full", label: "Can pay the full amount?", type: "select", options: ["Yes", "No"], required: true },
     {
@@ -21,7 +21,7 @@ export const formTemplates: Record<MissionType, FormField[]> = {
     { name: "first_name", label: "First Name", type: "text", required: true },
     { name: "last_name", label: "Last Name", type: "text", required: true },
     { name: "phone_number", label: "Phone Number", type: "text", required: true },
-    { name: "gender", label: "Gender", type: "select", options: ["Male", "Female"], required: true },
+    { name: "gender", label: "Gender", type: "select", options: ["male", "female"], required: true },
     { name: "coming_as_couple", label: "Coming as a couple?", type: "checkbox" },
     {
       name: "partner_name",

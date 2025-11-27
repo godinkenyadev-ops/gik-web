@@ -117,7 +117,7 @@ export default async function RegistrationPage({ params }: RegistrationPageProps
 
                 <div className="flex items-center gap-2">
                   <MapPin className="size-5 text-white/90" />
-                  <span>{mission.location_name || mission.location}</span>
+                  <span>{mission.location_name}</span>
                 </div>
               </div>
             </div>
@@ -140,7 +140,7 @@ export default async function RegistrationPage({ params }: RegistrationPageProps
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: jsonLdString(missionRegistrationJsonLd(mission.id)),
+          __html: jsonLdString(missionRegistrationJsonLd(String(mission.id))),
         }}
       />
     </section>

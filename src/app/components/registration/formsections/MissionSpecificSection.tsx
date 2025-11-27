@@ -10,7 +10,7 @@ interface MissionSpecificSectionProps {
     attending_days?: { day: number; day_date: string }[];
   };
   errors: Record<string, string>;
-  onChange: (field: string, value: any) => void;
+  onChange: (field: string, value: string | boolean | { day: number; day_date: string }[]) => void;
   missionData: MissionEventDetails;
 }
 

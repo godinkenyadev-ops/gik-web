@@ -86,7 +86,7 @@ export function useRegistrationForm(missionData: MissionEventDetails) {
       first_name: z.string().min(2).max(25),
       last_name: z.string().min(2).max(25),
       phone_number: z.string().length(10).regex(/^\d{10}$/),
-      gender: z.enum(["Male", "Female"] as const),
+      gender: z.enum(["male", "female"] as const),
       travelling_from: z.string().optional(),
       dietary_watch: z.string().optional(),
       can_pay_full: z.boolean(),
@@ -126,8 +126,7 @@ export function useRegistrationForm(missionData: MissionEventDetails) {
     value: string | boolean | string[]
   ) => {
     setErrors(prev => {
-      const updated = { ...prev };
-      delete updated[name];
+      const { [name]: _, ...updated } = prev;
       return updated;
     });
 
@@ -158,7 +157,7 @@ export function useRegistrationForm(missionData: MissionEventDetails) {
       const hasEndDate = missionData.end_date && missionData.end_date !== missionData.start_date;
       const isWeekLong = missionData.event_type === "week_long" || hasEndDate;
       
-      if (isWeekLong) {
+      if (isWeekLong && updated.mission_type === "week_long") {
         const weekLongData = updated as Partial<WeekLongRegistration>;
         
         if (name === "coming_as_couple") {
@@ -168,8 +167,8 @@ export function useRegistrationForm(missionData: MissionEventDetails) {
           }
         } else if (name === "partner_name") {
           weekLongData.partner_name = sanitizeName(value as string);
-        } else if (name === "attending_days") {
-          weekLongData.attending_days = value as WeekLongRegistration["attending_days"];
+        } else if (name === "attending_days" && Array.isArray(value)) {
+          weekLongData.attending_days = value as unknown as WeekLongRegistration["attending_days"];
         }
       }
 
