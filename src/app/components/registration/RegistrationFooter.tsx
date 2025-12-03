@@ -1,4 +1,6 @@
 import { FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
+import { CONTACT_PHONE } from "src/config/constants";
+
 
 export default function RegistrationFooter() {
   return (
@@ -12,8 +14,8 @@ export default function RegistrationFooter() {
         <div className="flex flex-col items-center">
           <FaPhoneAlt className="w-5 h-5 text-primary mb-2" />
           <span className="text-sm font-medium text-slate-700">Phone</span>
-          <a href="tel:+254700000000" className="text-sm text-slate-600 hover:text-primary transition-colors">
-            +254 798 931 558
+          <a href={`tel:${CONTACT_PHONE}`} className="text-sm text-slate-600 hover:text-primary transition-colors">
+            {CONTACT_PHONE}
           </a>
         </div>
 

@@ -1,0 +1,1 @@
+export const CONTACT_PHONE = "+254 798 931 558";
