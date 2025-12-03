@@ -9,8 +9,8 @@ import {
   DialogHeader,
 } from "@/app/components/ui/dialog";
 import { Button } from "@/app/components/ui/button";
+import { CONTACT_PHONE } from "src/config/constants";
 
-const SUPPORT_PHONE = "+254798931558";
 
 interface AlreadyRegisteredProps {
   isOpen: boolean;
@@ -55,10 +55,10 @@ export default function AlreadyRegistered({
               Try a <strong>different phone number</strong> or slightly change your name (e.g. add middle name).
               <br className="sm:hidden" /> Still stuck? Call us at{' '}
               <a
-                href={`tel:${SUPPORT_PHONE}`}
+                href={`tel:${CONTACT_PHONE}`}
                 className="font-bold text-emerald-700 underline underline-offset-2 hover:text-emerald-600"
               >
-                {SUPPORT_PHONE}
+                {CONTACT_PHONE}
               </a>
             </p>
           </div>
