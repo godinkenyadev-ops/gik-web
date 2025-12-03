@@ -71,9 +71,17 @@ export default function RegForm({ missionData }: RegFormProps) {
       setShowSuccess(true);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Registration failed";
+      console.log(errorMessage);
 
-      if (errorMessage === "already_registered") {
-        setSubmittedFirstName(result.data.first_name);
+      const alreadyExists = 
+      errorMessage.toLowerCase().includes('already exists') ||
+      errorMessage.toLowerCase().includes('already registered') ||
+      errorMessage === 'already_registered';
+      if (alreadyExists) {
+        const firstName = result.data.first_name;
+        if (firstName) {
+          setSubmittedFirstName(firstName);
+        }
         setShowAlreadyRegistered(true);
       } else {
         toast.error(errorMessage);
@@ -99,15 +107,7 @@ const closeAlreadyRegistered = () => {
   setDaysResetKey(prev => prev + 1);
 };
 
-  if (showAlreadyRegistered) {
-    return (
-      <AlreadyRegistered
-        firstName={submittedFirstName}
-        missionTitle={missionData.title}
-        onTryAgain={closeAlreadyRegistered}
-      />
-    );
-  }
+
 
   return (
     <>
@@ -148,6 +148,16 @@ const closeAlreadyRegistered = () => {
         isOpen={showSuccess} 
         onClose={closeSuccessModal} 
         firstName={submittedFirstName || "Friend"} 
+      />
+
+      <AlreadyRegistered
+        isOpen={showAlreadyRegistered}
+        onClose={closeAlreadyRegistered}
+        onTryAgain={() => {
+          setShowAlreadyRegistered(false);
+        }}
+        firstName={submittedFirstName}
+        missionTitle={missionData.title}
       />
     </>
   );
