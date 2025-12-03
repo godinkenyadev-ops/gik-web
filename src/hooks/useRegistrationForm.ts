@@ -90,7 +90,12 @@ export function useRegistrationForm(missionData: MissionEventDetails) {
       travelling_from: z.string().optional(),
       dietary_watch: z.string().optional(),
       can_pay_full: z.boolean(),
-      support_needed: z.string().optional(),
+      support_needed: z.string().optional().refine((val) => {
+        if (!val) return true;
+        return Number(val) <= missionData.registration_fee;
+      }, {
+        message: `Support amount cannot exceed registration fee of KES ${missionData.registration_fee.toLocaleString()}`
+      }),
     });
   
     const oneDaySchema = base.extend({
@@ -143,7 +148,16 @@ export function useRegistrationForm(missionData: MissionEventDetails) {
       } else if (name === "dietary_watch") {
         updated.dietary_watch = sanitizeText(value as string);
       } else if (name === "support_needed") {
-        updated.support_needed = sanitizeAmount(value as string);
+        const sanitizedAmount = sanitizeAmount(value as string);
+        updated.support_needed = sanitizedAmount;
+        
+        // Validate support amount doesn't exceed registration fee
+        if (sanitizedAmount && Number(sanitizedAmount) > missionData.registration_fee) {
+          setErrors(prev => ({
+            ...prev,
+            support_needed: `Support amount cannot exceed registration fee of KES ${missionData.registration_fee.toLocaleString()}`
+          }));
+        }
       } else if (name === "gender") {
         updated.gender = value as Gender;
       } else if (name === "can_pay_full") {

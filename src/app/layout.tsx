@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Inter, Playfair_Display } from "next/font/google";
 import { getSiteUrl } from "@/lib/seo";
-import { Toaster } from "sonner";
+import { Toaster } from "@/app/components/ui/sonner";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -35,7 +35,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <div className="flex min-h-screen flex-col">
           <main className="flex-1">{children}</main>
         </div>
-        <Toaster />
+        <Toaster 
+          position="top-right"
+          toastOptions={{
+            style: {
+              background: "white",
+              border: "1px solid rgb(34 197 94)",
+              borderRadius: "1rem",
+              color: "rgb(15 23 42)",
+              boxShadow: "0 10px 15px -3px rgb(34 197 94 / 0.1), 0 4px 6px -4px rgb(34 197 94 / 0.1)"
+            },
+            className: "font-medium"
+          }}
+        />
       </body>
     </html>
   );

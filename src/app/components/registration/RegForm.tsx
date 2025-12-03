@@ -73,10 +73,10 @@ export default function RegForm({ missionData }: RegFormProps) {
       const errorMessage = error instanceof Error ? error.message : "Registration failed";
       console.log(errorMessage);
 
-      const alreadyExists = 
-      errorMessage.toLowerCase().includes('already exists') ||
-      errorMessage.toLowerCase().includes('already registered') ||
-      errorMessage === 'already_registered';
+      const alreadyExists =
+        errorMessage.toLowerCase().includes('already exists') ||
+        errorMessage.toLowerCase().includes('already registered') ||
+        errorMessage === 'already_registered';
       if (alreadyExists) {
         const firstName = result.data.first_name;
         if (firstName) {
@@ -92,6 +92,7 @@ export default function RegForm({ missionData }: RegFormProps) {
   };
 
   const clearSelectedDays = () => {
+    handleChange("attending_days", []);
     setDaysResetKey(prev => prev + 1);
   };
 
@@ -101,32 +102,33 @@ export default function RegForm({ missionData }: RegFormProps) {
     clearSelectedDays();
   };
 
-const closeAlreadyRegistered = () => {
-  setShowAlreadyRegistered(false);
-  resetForm();
-  setDaysResetKey(prev => prev + 1);
-};
+  const closeAlreadyRegistered = () => {
+    setShowAlreadyRegistered(false);
+    handleChange("attending_days", []);
+    resetForm();
+    clearSelectedDays();
+  };
 
 
 
   return (
     <>
       <form ref={formRef} onSubmit={handleSubmit} className="space-y-8">
-        <PersonalInfoSection 
+        <PersonalInfoSection
           formData={formData}
           errors={errors}
           onChange={handleChange}
         />
-        
-        <MissionSpecificSection 
+
+        <MissionSpecificSection
           formData={formData}
           key={daysResetKey}
           errors={errors}
           onChange={handleChange}
           missionData={missionData}
         />
-        
-        <PaymentSection 
+
+        <PaymentSection
           formData={formData}
           errors={errors}
           onChange={handleChange}
@@ -144,10 +146,10 @@ const closeAlreadyRegistered = () => {
 
       <RegistrationFooter />
 
-      <SuccessModal 
-        isOpen={showSuccess} 
-        onClose={closeSuccessModal} 
-        firstName={submittedFirstName || "Friend"} 
+      <SuccessModal
+        isOpen={showSuccess}
+        onClose={closeSuccessModal}
+        firstName={submittedFirstName || "Friend"}
       />
 
       <AlreadyRegistered

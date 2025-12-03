@@ -43,7 +43,7 @@ export function TextInput({
         className={cn(
           "h-11 sm:h-12 w-full rounded-2xl border px-4 text-base text-slate-900 shadow-sm bg-white transition-all",
           "focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20",
-          error ? "border-rose-400" : "border-slate-200"
+          error ? "border-rose-400 ring-2 ring-rose-400/50" : "border-slate-200"
         )}
       />
       {error && <p className="text-sm text-rose-500">{error}</p>}
