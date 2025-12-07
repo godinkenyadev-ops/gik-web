@@ -85,7 +85,9 @@ export default function ComingSoon() {
         {[...Array(7)].map((_, i) => (
           <div
             key={i}
-            ref={(el) => setFloatingRef(el, i)}
+            ref={el => {
+              setFloatingRef(el, i);
+            }}
             className="relative z-10 w-full max-w-lg"
             style={{
               top: `${15 + i * 13}%`,
@@ -94,7 +96,6 @@ export default function ComingSoon() {
           />
         ))}
       </div>
-
       <div ref={containerRef} className="relative z-10 w-full max-w-2xl">
         <article
           ref={cardRef}
@@ -164,5 +165,5 @@ export default function ComingSoon() {
         </article>
       </div>
     </main>
-  )
+  );
 }
